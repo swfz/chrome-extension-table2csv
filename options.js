@@ -99,6 +99,17 @@ function constructOptions() {
     addColumnSelectorInput(parent, name, value);
   }
 
+  const addRawConfigurationText = (options) => {
+    const rawElem = document.createElement('textarea');
+    rawElem.rows = 50
+    rawElem.cols = 100
+
+    rawElem.value = JSON.stringify(options, null, 2);
+    
+    const rawBox = document.querySelector('div#raw');
+    rawBox.appendChild(rawElem);
+  }
+
   chrome.storage.sync.get(['options'], ({options}) => {
     console.log('options:', options);
     const box = document.querySelector('div#optionsList');
@@ -145,6 +156,9 @@ function constructOptions() {
 
     const saveButton = document.getElementById('saveSelector');
     saveButton.addEventListener('click', {keys: keys.concat('new'), handleEvent: saveInputs});
+
+    // raw
+    addRawConfigurationText(options);
   });
 }
 
