@@ -1,17 +1,13 @@
 # Table to CSV Chrome Extension
 
-## Options
+## motivation
 
+CSVダウンロード機能がない画面などで、データがほしい時用
 
-- text input
+下記を拡張のオプションから設定する
 
-row selector
-column selectors[]
+- 設定名
+- 行を特定するCSSセレクター
+- 列を特定するCSSセレクター
 
-- name
-
-これがpopupにリスト表示される
-
-- 
-
-
+設定後、拡張メニューのボタンクリックで該当データを取得しCSVをダウンロードしてくれる
