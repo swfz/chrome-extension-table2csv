@@ -28,18 +28,6 @@ function constructPopup() {
   });
 }
 
-// const downloadCsv = document.getElementById("downloadCsv");
-
-// downloadCsv.addEventListener('click', async () => {
-//   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
-//   chrome.scripting.executeScript({
-//     target: { tabId: tab.id },
-//     function: downloadCsvFromTable,
-//     args: ['hoge']
-//   });
-// });
-
 function downloadCsvFromTable(key) {
   console.log(key);
   const downloadCsv = (filename, csvText) => {
@@ -61,7 +49,7 @@ function downloadCsvFromTable(key) {
 
     const data = Array.from(rows).map(row => {
       return columnSelectors.map(selector => {
-        return row.querySelector(selector).textContent.trim();
+        return row.querySelector(selector)?.textContent.trim();
       });
     });
 
