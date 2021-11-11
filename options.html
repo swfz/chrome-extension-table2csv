@@ -8,6 +8,19 @@
       <p>Please Input Row Selector And Column Selector(CSS Selector)</p>
     </div>
 
+    <hr />
+    <div>Configuration Structure(e.g.)</div>
+    <div class="code">
+      settings: [
+        {
+          key: 'hoge',
+          rowSelector: 'table > tr',
+          columnSelectors: [':scope > td.hoge',':scope > td.fuga']
+        },..........
+      ]
+    </div>
+    <hr />
+
     <div id="optionsList">
     </div>
     <button id="saveSelector">Save</button>

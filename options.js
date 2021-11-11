@@ -26,10 +26,7 @@ function constructOptions() {
   }
 
   const divider = () => {
-    const div = document.createElement('div');
-    div.textContent = '--------------------------------------------------';
-
-    return div;
+    return document.createElement('hr');
   }
 
   const plusButton = (name = '') => {
