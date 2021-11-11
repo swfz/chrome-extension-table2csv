@@ -1,19 +1,49 @@
 // Initialize button with user's preferred color
-const downloadCsv = document.getElementById("downloadCsv");
 
-downloadCsv.addEventListener('click', async () => {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+function constructPopup() {
+  const box = document.querySelector('div#dlButtons');
 
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    function: downloadCsvFromTable,
+  chrome.storage.sync.get(['options'], ({options}) => {
+    console.log(options);
+
+    const keys = options.map(option => option.key);
+    console.log('keys',keys);
+
+    for (const key of keys) {
+      const dlButton = document.createElement('button');
+      dlButton.textContent = key;
+
+      box.appendChild(dlButton);
+
+      dlButton.addEventListener('click', async () => {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          function: downloadCsvFromTable,
+          args: [key]
+        });
+      });
+    }
   });
-});
+}
 
-function downloadCsvFromTable() {
+// const downloadCsv = document.getElementById("downloadCsv");
+
+// downloadCsv.addEventListener('click', async () => {
+//   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+//   chrome.scripting.executeScript({
+//     target: { tabId: tab.id },
+//     function: downloadCsvFromTable,
+//     args: ['hoge']
+//   });
+// });
+
+function downloadCsvFromTable(key) {
+  console.log(key);
   const downloadCsv = (filename, csvText) => {
     const a = document.createElement('a');
-    const mimeType = 'text/plain';
     const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
     const blob = new Blob([bom, csvText], {type: 'text/plain'});
     const url = window.URL;
@@ -38,10 +68,15 @@ function downloadCsvFromTable() {
     return data.map(row => row.join(",")).join("\n");
   }
 
-  chrome.storage.sync.get(['rowSelector', 'columnSelectors'], (options) => {
+  chrome.storage.sync.get(['options'], ({options}) => {
     console.log(options);
-    const csvData = getData(options.rowSelector, options.columnSelectors);
+    const targetOption = options.find(o => o.key === key);
+    console.log('target', targetOption);
 
-    downloadCsv('hoge.csv', csvData);
+    const csvData = getData(targetOption.rowSelector, targetOption.columnSelectors);
+
+    downloadCsv(`${key}.csv`, csvData);
   });
 }
+
+constructPopup();
