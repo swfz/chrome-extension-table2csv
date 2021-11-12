@@ -60,6 +60,7 @@ function constructOptions() {
     input.name = name;
     input.value = value;
     input.size = 50;
+    input.placeholder = 'CSS Selector';
 
     parentElem.appendChild(label);
     parentElem.appendChild(input);
@@ -74,17 +75,25 @@ function constructOptions() {
     return elem;
   }
 
-  const addColumnSelectorInput = (parentElem, name, value) => {
+  const addColumnSelectorInput = (parentElem, selectorName, selectorValue) => {
     const label = document.createElement('span');
     label.textContent = 'column: ';
 
-    const input = document.createElement('input');
-    input.name = name;
-    input.value = value;
-    input.size = 50;
+    const headerInput = document.createElement('input');
+    // headerInput.name = headerName;
+    // headerInput.value = headerValue;
+    headerInput.size = 10;
+    headerInput.placeholder = 'Column Name';
+
+    const selectorInput = document.createElement('input');
+    selectorInput.name = selectorName;
+    selectorInput.value = selectorValue;
+    selectorInput.size = 50;
+    selectorInput.placeholder = 'CSS Selector';
 
     parentElem.appendChild(label);
-    parentElem.appendChild(input);
+    parentElem.appendChild(headerInput);
+    parentElem.appendChild(selectorInput);
 
     parentElem.appendChild(br());
   }
