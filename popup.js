@@ -11,6 +11,7 @@ function constructPopup() {
 
     for (const key of keys) {
       const dlButton = document.createElement('button');
+      dlButton.classList.add('dl');
       dlButton.textContent = key;
 
       box.appendChild(dlButton);
