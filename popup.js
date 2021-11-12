@@ -61,7 +61,7 @@ function downloadCsvFromTable(key) {
     const targetOption = options.find(o => o.key === key);
     console.log('target', targetOption);
 
-    const csvData = getData(targetOption.rowSelector, targetOption.columnSelectors);
+    const csvData = getData(targetOption.rowSelector, targetOption.columnSelectors.map(v => v.selector));
 
     downloadCsv(`${key}.csv`, csvData);
   });

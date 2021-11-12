@@ -8,8 +8,11 @@ function constructOptions() {
     const options = inputKeys.map(inputKey => {
       const key = document.querySelector(`input[name="key_${inputKey}"]`).value;
       const rowSelector = document.querySelector(`input[name="row_${inputKey}"]`).value;
-      const columnSelectorInputs = document.querySelectorAll(`input[name="column_${inputKey}"]`);
-      const columnSelectors = Array.from(columnSelectorInputs).map(input => input.value).filter(v => v !== '');
+      const columnSelectorValues = Array.from(document.querySelectorAll(`input[name="column_${inputKey}"]`)).map(input => input.value);
+      const columnRemarkValues = Array.from(document.querySelectorAll(`input[name="remark_${inputKey}"]`)).map(input => input.value);
+      const columnSelectors = columnSelectorValues.map((selectorValue, i) => {
+        return {selector: selectorValue, remark: columnRemarkValues[i]}
+      }).filter(v => v.selector !== '');
 
       return {key, rowSelector, columnSelectors};
     });
@@ -75,15 +78,15 @@ function constructOptions() {
     return elem;
   }
 
-  const addColumnSelectorInput = (parentElem, selectorName, selectorValue) => {
+  const addColumnSelectorInput = (parentElem, selectorName, selectorValue, remarkName, remarkValue) => {
     const label = document.createElement('span');
     label.textContent = 'column: ';
 
-    const headerInput = document.createElement('input');
-    // headerInput.name = headerName;
-    // headerInput.value = headerValue;
-    headerInput.size = 10;
-    headerInput.placeholder = 'Column Name';
+    const remarkInput = document.createElement('input');
+    remarkInput.name = remarkName;
+    remarkInput.value = remarkValue;
+    remarkInput.size = 10;
+    remarkInput.placeholder = 'Column Name';
 
     const selectorInput = document.createElement('input');
     selectorInput.name = selectorName;
@@ -92,7 +95,7 @@ function constructOptions() {
     selectorInput.placeholder = 'CSS Selector';
 
     parentElem.appendChild(label);
-    parentElem.appendChild(headerInput);
+    parentElem.appendChild(remarkInput);
     parentElem.appendChild(selectorInput);
 
     parentElem.appendChild(br());
@@ -102,10 +105,12 @@ function constructOptions() {
     console.log(event);
     console.log(this);
     const parent = this.parent;
-    const value = this.value;
-    const name = this.name;
+    const selectorName = this.selectorName;
+    const selectorValue = this.selectorValue;
+    const remarkName = this.remarkName;
+    const remarkValue = this.remarkValue;
 
-    addColumnSelectorInput(parent, name, value);
+    addColumnSelectorInput(parent, selectorName, selectorValue, remarkName, remarkValue);
   }
 
   const addRawConfigurationText = (options) => {
@@ -129,17 +134,24 @@ function constructOptions() {
       for (const option of options) {
         const rowSelector = option.rowSelector;
         const key = option.key;
-        const columnSelectors = option.columnSelectors;
+        const columnSelectorItems = option.columnSelectors;
 
         addKeyInput(box, `key_${key}`, key);
         addRowSelectorInput(box, `row_${key}`, rowSelector);
         const columnBox = columnSelectorBox();
-        for (const selector of columnSelectors) {
-          addColumnSelectorInput(columnBox, `column_${key}`, selector);
+        for (const item of columnSelectorItems) {
+          addColumnSelectorInput(columnBox, `column_${key}`, item.selector, `remark_${key}`, item.remark);
         }
 
         const plus = plusButton(`plus_${key}`);
-        plus.addEventListener('click', {parent: columnBox, name: `column_${key}`, value: '', handleEvent: addColumnSelectorsInput});
+        plus.addEventListener('click', {
+          parent: columnBox,
+          selectorName: `column_${key}`,
+          selectorValue: '',
+          remarkName: `remark_${key}`,
+          remarkValue: '',
+          handleEvent: addColumnSelectorsInput
+        });
 
         box.appendChild(columnBox);
         box.appendChild(plus);
@@ -150,15 +162,21 @@ function constructOptions() {
     addKeyInput(box, 'key_new', '');
     addRowSelectorInput(box, 'row_new', '');
     const columnBox = columnSelectorBox();
-    addColumnSelectorInput(columnBox, 'column_new', '');
+    addColumnSelectorInput(columnBox, 'column_new', '', 'remark_new', '');
 
     // + button
     const plus = plusButton('first');
-    plus.addEventListener('click', {parent: columnBox, value: '', handleEvent: addColumnSelectorsInput});
+    plus.addEventListener('click', {
+      parent: columnBox,
+      selectorName: 'column_new',
+      selectorValue: '',
+      remarkName: 'remark_new',
+      remarkValue: '',
+      handleEvent: addColumnSelectorsInput
+    });
 
     box.appendChild(columnBox);
     box.appendChild(plus);
-
 
     box.appendChild(br());
     box.appendChild(divider());

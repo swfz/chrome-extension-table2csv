@@ -13,15 +13,17 @@
 
     <hr />
     <div>Configuration Structure(e.g.)</div>
-    <div class="code">
-      settings: [
-        {
-          key: 'hoge',
-          rowSelector: 'table > tr',
-          columnSelectors: [':scope > td.hoge',':scope > td.fuga']
-        },..........
-      ]
-    </div>
+    <pre>
+      <code>
+settings: [
+  {
+    key: 'hoge',
+    rowSelector: 'table > tr',
+    columnSelectors: [{remark: '', selector: ':scope > td.hoge'},{remark: '', selector: ':scope > td.fuga'}]
+  },..........
+]
+      </code>
+    </pre>
     <hr />
 
     <div id="optionsList">
