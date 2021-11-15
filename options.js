@@ -23,6 +23,12 @@ function constructOptions() {
     chrome.storage.sync.set({options: filteredOptions});
   }
 
+  const importJson = function(event) {
+    const rawJson = document.querySelector('textarea[name="rawjson"]').value;
+    const options = JSON.parse(rawJson);
+
+    chrome.storage.sync.set({options: options});
+  }
 
   const br = () => {
     return document.createElement('br');
@@ -115,8 +121,9 @@ function constructOptions() {
 
   const addRawConfigurationText = (options) => {
     const rawElem = document.createElement('textarea');
-    rawElem.rows = 50
-    rawElem.cols = 100
+    rawElem.rows = 50;
+    rawElem.cols = 100;
+    rawElem.name = 'rawjson';
 
     rawElem.value = JSON.stringify(options, null, 2);
     
@@ -183,6 +190,9 @@ function constructOptions() {
 
     const saveButton = document.getElementById('saveSelector');
     saveButton.addEventListener('click', {keys: keys.concat('new'), handleEvent: saveInputs});
+
+    const importButton = document.querySelector('button#importConfig');
+    importButton.addEventListener('click', importJson);
 
     // raw
     addRawConfigurationText(options);
