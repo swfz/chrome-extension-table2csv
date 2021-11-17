@@ -34,7 +34,7 @@ function downloadCsvFromTable(key) {
   const downloadCsv = (filename, csvText) => {
     const a = document.createElement('a');
     const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
-    const blob = new Blob([bom, csvText], {type: 'text/plain'});
+    const blob = new Blob([bom, csvText], {type: 'text/csv'});
     const url = window.URL;
     const blobUrl = url.createObjectURL(blob);
     a.download = `${filename}.csv`;
@@ -64,7 +64,7 @@ function downloadCsvFromTable(key) {
 
     const csvData = getData(targetOption.rowSelector, targetOption.columnSelectors.map(v => v.selector));
 
-    downloadCsv(`${key}.csv`, csvData);
+    downloadCsv(`${key}`, csvData);
   });
 }
 
